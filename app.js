@@ -19,5 +19,5 @@ app.use(function(req , res){
     res.status(404).send({url : `${req.originalUrl} not found`})
 })
 
-const port = process.env.PORT // Fallback to port 3000 if PORT is not set
+const port = process.env.PORT
 app.listen(port, () => console.log(`Server running on port ${port}`));
