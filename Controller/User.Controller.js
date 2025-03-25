@@ -23,7 +23,25 @@ exports.Register = async function (req, res) {
 
 exports.Login = async function (req, res) {
     try {
-        
+        let user = await UserModel.findOne({ email:req.body.email })
+        if (!user || !await user.comparePassword(req.body.password)) {
+            res.status(400).send({ massage: 'invalid email or password' })
+        } else {
+            const token = jwt.sign({
+                email: user.email ,
+                _id: user._id , 
+                role: user.role}, 
+                'secretKey'
+            )
+            return res.json({
+                message: 'user loged in success',
+                user: {
+                    email: user.email,
+                    name: user.name,
+                    jwt: token
+                }
+            })
+        }
     } catch (error) {
         res.status(400).send({
             message: error
